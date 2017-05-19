@@ -593,21 +593,8 @@ class ModbusRtuFramer(IModbusFramer):
         :param callback: The function to send results to
         '''
         self.addToFrame(data)
-        while True:
-            if self.isFrameReady():
-                if self.checkFrame():
-                    self._process(callback)
-                else:
-                    # Could be an error response
-                    if len(self.__buffer):
-                        # Possible error ???
-                       self._process(callback, error=True)
-            else:
-                if len(self.__buffer):
-                    # Possible error ???
-                    if self.__header.get('len', 0) < 2:
-                        self._process(callback, error=True)
-                break
+        while self.isFrameReady() and self.checkFrame():
+            self._process(callback)
 
     def buildPacket(self, message):
         ''' Creates a ready to send modbus packet
