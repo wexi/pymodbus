@@ -593,8 +593,21 @@ class ModbusRtuFramer(IModbusFramer):
         :param callback: The function to send results to
         '''
         self.addToFrame(data)
-        while self.isFrameReady() and self.checkFrame():
-            self._process(callback)
+        while True:
+            if self.isFrameReady():
+                if self.checkFrame():
+                    self._process(callback)
+                else:
+                    # Could be an error response
+                    if len(self._buffer):
+                        # Possible error ???
+                       self._process(callback, error=True)
+            else:
+                if len(self._buffer):
+                    # Possible error ???
+                    if self._header.get('len', 0) < 2:
+                        self._process(callback, error=True)
+                break
 
     def buildPacket(self, message):
         ''' Creates a ready to send modbus packet
@@ -818,7 +831,7 @@ class ModbusBinaryFramer(IModbusFramer):
         self._hsize  = 0x02
         self._start  = b'\x7b'  # {
         self._end    = b'\x7d'  # }
-        self.__repeat = [b'}'[0], b'{'[0]] # python3 hack
+        self._repeat = [b'}'[0], b'{'[0]] # python3 hack
         self.decoder  = decoder
 
     #-----------------------------------------------------------------------#
@@ -945,7 +958,7 @@ class ModbusBinaryFramer(IModbusFramer):
         '''
         array = bytearray()
         for d in data:
-            if d in self.__repeat:
+            if d in self._repeat:
                 array.append(d)
             array.append(d)
         return bytes(array)
