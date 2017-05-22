@@ -609,11 +609,11 @@ class ModbusRtuFramer(IModbusFramer):
         packet += struct.pack(">H", computeCRC(packet))
         return packet
 
-    def _process(self, callback, error=False):
+    def _process(self, callback):
         """
         Process incoming packets irrespective error condition
         """
-        data = self.getRawFrame() if error else self.getFrame()
+        data = self.getFrame()
         result = self.decoder.decode(data)
         if result is None:
             raise ModbusIOException("Unable to decode request")
