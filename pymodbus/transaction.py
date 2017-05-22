@@ -487,9 +487,10 @@ class ModbusRtuFramer(IModbusFramer):
         try:
             self.populateHeader()
             frame_size = self._header['len']
+            crc1 = self._buffer[frame_size - 1]
+            crc0 = self._buffer[frame_size - 2]
             data = self._buffer[:frame_size - 2]
-            crc = self._buffer[frame_size - 2:frame_size]
-            crc_val = (byte2int(crc[0]) << 8) + byte2int(crc[1])
+            crc_val = (byte2int(crc0) << 8) + byte2int(crc1)
             return checkCRC(data, crc_val)
         except (IndexError, KeyError):
             return False
@@ -593,21 +594,8 @@ class ModbusRtuFramer(IModbusFramer):
         :param callback: The function to send results to
         '''
         self.addToFrame(data)
-        while True:
-            if self.isFrameReady():
-                if self.checkFrame():
-                    self._process(callback)
-                else:
-                    # Could be an error response
-                    if len(self._buffer):
-                        # Possible error ???
-                       self._process(callback, error=True)
-            else:
-                if len(self._buffer):
-                    # Possible error ???
-                    if self._header.get('len', 0) < 2:
-                        self._process(callback, error=True)
-                break
+        while self.isFrameReady() and self.checkFrame():
+            self._process(callback)
 
     def buildPacket(self, message):
         ''' Creates a ready to send modbus packet
