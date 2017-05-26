@@ -66,7 +66,8 @@ class ModbusClientProtocol(protocol.Protocol, ModbusClientMixin):
         self.framer = framer or ModbusSocketFramer(ClientDecoder())
         if isinstance(self.framer, ModbusSocketFramer):
             self.transaction = DictTransactionManager(self, **kwargs)
-        else: self.transaction = FifoTransactionManager(self, **kwargs)
+        else:
+            self.transaction = FifoTransactionManager(self, **kwargs)
 
     def connectionMade(self):
         ''' Called upon a successful client connection.

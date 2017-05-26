@@ -244,18 +244,20 @@ class FifoTransactionManager(ModbusTransactionManager):
         _logger.debug("getting transaction %s" % str(tid))
         return self.transactions.pop(0) if self.transactions else None
 
-    def delTransaction(self, tid):
-        ''' Removes a transaction matching the referenced tid
+    def delTransaction(self):
+        '''Remove oldest transaction
 
-        :param tid: The transaction to remove
+        @return: number of remaining transactions or -1 if removal failed
         '''
-        _logger.debug("deleting transaction %d" % tid)
-        if self.transactions: self.transactions.pop(0)
 
+        tn = len(self.transactions)
+        if tn:
+            self.transactions.pop(0)
+        return tn - 1
 
-#---------------------------------------------------------------------------#
+# ---------------------------------------------------------------------------
 # Modbus TCP Message
-#---------------------------------------------------------------------------#
+# ---------------------------------------------------------------------------
 class ModbusSocketFramer(IModbusFramer):
     ''' Modbus Socket Frame controller
 
