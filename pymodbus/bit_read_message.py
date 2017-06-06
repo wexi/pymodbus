@@ -22,7 +22,7 @@ class ReadBitsRequestBase(ModbusRequest):
         :param count: The number of bits after 'address' to read
         '''
         ModbusRequest.__init__(self, **kwargs)
-        self.address = address
+        self.address = address - 1
         self.count = count
 
     def encode(self):
