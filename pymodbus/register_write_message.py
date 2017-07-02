@@ -27,7 +27,7 @@ class WriteSingleRegisterRequest(ModbusRequest):
         :param value: The values to write
         '''
         ModbusRequest.__init__(self, **kwargs)
-        self.address = address
+        self.address = address - 1
         self.value = value
 
     def encode(self):
@@ -94,7 +94,7 @@ class WriteSingleRegisterResponse(ModbusResponse):
         :param value: The values to write
         '''
         ModbusResponse.__init__(self, **kwargs)
-        self.address = address
+        self.address = address - 1
         self.value = value
 
     def encode(self):
@@ -142,7 +142,7 @@ class WriteMultipleRegistersRequest(ModbusRequest):
         :param values: The values to write
         '''
         ModbusRequest.__init__(self, **kwargs)
-        self.address = address
+        self.address = address - 1
         if values is None:
             values = []
         elif not hasattr(values, '__iter__'):
@@ -216,7 +216,7 @@ class WriteMultipleRegistersResponse(ModbusResponse):
         :param count: The number of registers to write to
         '''
         ModbusResponse.__init__(self, **kwargs)
-        self.address = address
+        self.address = address - 1
         self.count = count
 
     def encode(self):
