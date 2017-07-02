@@ -94,7 +94,7 @@ class WriteSingleRegisterResponse(ModbusResponse):
         :param value: The values to write
         '''
         ModbusResponse.__init__(self, **kwargs)
-        self.address = address - 1
+        self.address = address
         self.value = value
 
     def encode(self):
@@ -216,7 +216,7 @@ class WriteMultipleRegistersResponse(ModbusResponse):
         :param count: The number of registers to write to
         '''
         ModbusResponse.__init__(self, **kwargs)
-        self.address = address - 1
+        self.address = address
         self.count = count
 
     def encode(self):
