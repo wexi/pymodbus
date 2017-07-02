@@ -47,7 +47,7 @@ class WriteSingleCoilRequest(ModbusRequest):
         :param value: The value to write at address
         '''
         ModbusRequest.__init__(self, **kwargs)
-        self.address = address
+        self.address = address - 1
         self.value = bool(value)
 
     def encode(self):
