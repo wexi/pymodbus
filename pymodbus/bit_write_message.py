@@ -163,7 +163,7 @@ class WriteMultipleCoilsRequest(ModbusRequest):
         :param values: The values to write
         '''
         ModbusRequest.__init__(self, **kwargs)
-        self.address = address
+        self.address = address - 1
         if not values: values = []
         elif not hasattr(values, '__iter__'): values = [values]
         self.values  = values
