@@ -302,9 +302,9 @@ class FifoTransactionManager(ModbusTransactionManager):
             self.transactions.pop(0)
         return tn - 1
 
-# ---------------------------------------------------------------------------
+#---------------------------------------------------------------------------#
 # Modbus TCP Message
-# ---------------------------------------------------------------------------
+#---------------------------------------------------------------------------#
 class ModbusSocketFramer(IModbusFramer):
     ''' Modbus Socket Frame controller
 
@@ -663,14 +663,12 @@ class ModbusRtuFramer(IModbusFramer):
 
     def _process(self, callback):
         """
-        Process incoming packets irrespective error condition
+        Process incoming packets
         """
         data = self.getFrame()
         result = self.decoder.decode(data)
         if result is None:
             raise ModbusIOException("Unable to decode request")
-        elif error and result.function_code < 0x80:
-            raise InvalidResponseRecievedException(result)
         else:
             self.populateResult(result)
             self.advanceFrame()
