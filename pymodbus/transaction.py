@@ -179,6 +179,14 @@ class ModbusTransactionManager(object):
         '''
         raise NotImplementedException("delTransaction")
 
+    def popTransaction(self):
+        '''Removes oldest transaction
+
+        @return: number of remaining transactions or -1 if removal failed
+        '''
+
+        raise NotImplementedException("popTransaction")
+
     def getNextTID(self):
         ''' Retrieve the next unique transaction identifier
 
@@ -247,6 +255,18 @@ class DictTransactionManager(ModbusTransactionManager):
         _logger.debug("deleting transaction %d" % tid)
         self.transactions.pop(tid, None)
 
+    def popTransaction(self):
+        '''Removes oldest transaction
+
+        @return: number of remaining transactions or -1 if removal failed
+        '''
+
+        tn = len(self.transactions)
+        if tn:
+            tid = min(self.transactions)
+            self.transactions.pop(tid)
+        return tn - 1
+
 
 class FifoTransactionManager(ModbusTransactionManager):
     ''' Impelements a transaction for a manager where the
@@ -291,8 +311,16 @@ class FifoTransactionManager(ModbusTransactionManager):
         _logger.debug("getting transaction %s" % str(tid))
         return self.transactions.pop(0) if self.transactions else None
 
-    def delTransaction(self):
-        '''Remove oldest transaction
+    def delTransaction(self, tid):
+        ''' Removes a transaction matching the referenced tid
+
+        :param tid: The transaction to remove
+        '''
+        _logger.debug("deleting transaction %d" % tid)
+        if self.transactions: self.transactions.pop(0)
+
+    def popTransaction(self):
+        '''Removes oldest transaction
 
         @return: number of remaining transactions or -1 if removal failed
         '''
