@@ -491,7 +491,7 @@ class ModbusSocketFramer(IModbusFramer):
 
     def _process(self, callback, error=False):
         """
-        Process incoming packets irrespective error condition 
+        Process incoming packets irrespective error condition
         """
         data = self.getRawFrame() if error else self.getFrame()
         result = self.decoder.decode(data)
@@ -517,7 +517,7 @@ class ModbusSocketFramer(IModbusFramer):
 
     def getRawFrame(self):
         """
-        Returns the complete buffer 
+        Returns the complete buffer
         """
         return self._buffer
 
@@ -938,7 +938,7 @@ class ModbusBinaryFramer(IModbusFramer):
         '''
         self._buffer = b''
         self._header = {'crc':0x0000, 'len':0, 'uid':0x00}
-        self._hsize  = 0x02
+        self._hsize  = 0x01
         self._start  = b'\x7b'  # {
         self._end    = b'\x7d'  # }
         self._repeat = [b'}'[0], b'{'[0]] # python3 hack
@@ -1082,8 +1082,8 @@ class ModbusBinaryFramer(IModbusFramer):
         end of the message (python just doesn't have the resolution to
         check for millisecond delays).
         '''
-        self.__buffer = b''
-        self.__header = {'crc': 0x0000, 'len': 0, 'uid': 0x00}
+        self._buffer = b''
+        self._header = {'crc': 0x0000, 'len': 0, 'uid': 0x00}
 
 #---------------------------------------------------------------------------#
 # Exported symbols
