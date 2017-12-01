@@ -1,6 +1,10 @@
 #!/usr/bin/env python
+'''
+Installs pymodbus using distutils
 
-from setuptools import setup, find_packages
+Run:
+    python setup.py install
+to install the package from the source archive.
 
 For information about setuptools
 http://peak.telecommunity.com/DevCenter/setuptools#new-and-changed-setup-keywords
