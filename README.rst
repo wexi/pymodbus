@@ -12,8 +12,8 @@
 Foreword
 ========
 
-This 'local' branch follows the 'dev' branch of
-https://github.com/riptideio/pymodbus with the following changes:
+The 'master' branch just follows: https://github.com/riptideio/pymodbus
+The 'local' branch is this 'master' branch forked for the following reasons:
 
 * Get the async serial RTU working (IMHO the original packing is buggy)
 * Number Modbus registers from 1

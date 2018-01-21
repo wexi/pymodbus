@@ -1,18 +1,6 @@
 #!/usr/bin/env python
-'''
-Installs pymodbus using distutils
 
-Run:
-    python setup.py install
-to install the package from the source archive.
-
-For information about setuptools
-http://peak.telecommunity.com/DevCenter/setuptools#new-and-changed-setup-keywords
-'''
-#---------------------------------------------------------------------------# 
-# initialization
-#---------------------------------------------------------------------------# 
-try: # if not installed, install and proceed
+try:                            # if not installed, install and proceed
     from setuptools import setup, find_packages
 except ImportError:
     from ez_setup import use_setuptools
